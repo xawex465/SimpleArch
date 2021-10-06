@@ -24,10 +24,8 @@ enter
 enter
 enter
 
-
 w add created partitions
 y yes
-
 
 #3 Format partitions
 
@@ -46,6 +44,22 @@ mount /dev/nvme0n1p2 /mnt
 mkdir -p /mnt/efi
 mount -o noatime /dev/nvme0n1p1 /mnt/efi
 
+#5 Install
+pacstrap /mnt base grub-efi-x86_64 efibootmgr os-prober amd-ucode linux linux-headers linux-firmware bash-completion inetutils usbutils nvme-cli nano htop
 
+#6 Create fstab
+genfstab -pU /mnt >> /mnt/etc/fstab
 
+#7 Chroot
+arch-chroot /mnt /bin/bash
 
+#8 Install grub
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+
+#9 Generate grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
+
+#10 Check efi enteries
+efibootmgr
+
+#11 Set Locale to pl_PL.UTF-8 + Time + Hwclock nano /etc/locale.gen
