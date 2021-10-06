@@ -112,4 +112,12 @@ Search for "#%wheel ALL=(ALL) ALL" and remove # and add this line "Defaults root
 %wheel ALL=(ALL) ALL
 Defaults rootpw
 
-#17
+enter chroot again
+
+#17 Setup Network Manager
+pacman -S networkmanager
+systemctl enable NetworkManager
+
+exit chroot
+reboot
+
