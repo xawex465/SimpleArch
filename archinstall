@@ -45,7 +45,7 @@ mkdir -p /mnt/efi
 mount -o noatime /dev/nvme0n1p1 /mnt/efi
 
 #5 Install
-pacstrap /mnt base grub-efi-x86_64 efibootmgr os-prober amd-ucode linux linux-headers linux-firmware bash-completion inetutils usbutils nvme-cli nano htop
+pacstrap /mnt base base-devel grub-efi-x86_64 efibootmgr os-prober amd-ucode linux linux-headers linux-firmware bash-completion inetutils usbutils nvme-cli nano htop
 
 #6 Create fstab
 genfstab -pU /mnt >> /mnt/etc/fstab
@@ -63,3 +63,53 @@ grub-mkconfig -o /boot/grub/grub.cfg
 efibootmgr
 
 #11 Set Locale to pl_PL.UTF-8 + Time + Hwclock nano /etc/locale.gen
+
+nano /etc/locale.gen  add # for not wanted languages
+                      remove # from wanted languages
+                      
+locale-gen
+
+echo LANG=pl_PL.UTF-8 > /etc/locale.conf
+
+export LANG=pl_PL.UTF-8
+
+ls /usr/share/zoneinfo/
+
+ln -sf /usr/share/zoneinfo/Europe/Warsaw > /etc/localtime
+
+timedatectl list-timezones
+
+timedatectl set-timezone Europe/Warsaw
+
+#12 Set Hostname (hostnamehere is the hostname)
+echo hostnamehere > /etc/hostname
+
+#13 Enable ILoveCandy + Colour support in pacman
+nano /etc/pacman.conf
+
+remove # from "#Color"
+
+add "ILoveCandy" in the misc options part on a new line below "#VerbosePkgLists"
+
+#14 Enable multilib for 32bit applications
+
+nano /etc/pacman.conf
+remove #"#[multilib]"
+remove # "#Include = /etc/pacman.d/mirrorlist"
+pacman -Syu
+
+#15 Setup User
+passwd
+useradd -m -g users -G wheel -s /bin/bash "username"
+passwd "username"
+
+#16 Setup Sudo for group Whell
+exit chroot just type exit and enter
+enter this EDITOR=nano visudo
+
+Search for "#%wheel ALL=(ALL) ALL" and remove # and add this line "Defaults rootpw" below so it looks like the following
+
+%wheel ALL=(ALL) ALL
+Defaults rootpw
+
+#17
