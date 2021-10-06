@@ -1,0 +1,51 @@
+1# Setup Wifi
+iwctl
+station wlan0 scan
+station wlan0 connect 'wifi name'
+type password and enter
+ping google.com to see if internet work
+
+2# Create Disk Partitions
+lsblk to see disks
+gdisk /dev/nvme0n1 "nvme0n1" is the disk where i want create partitions and install arch
+
+/efi
+o for clean disk
+n for create first partition
+enter
+enter
++128M
+ef00
+
+/root
+n for next partition
+enter
+enter
+enter
+enter
+
+
+w add created partitions
+y yes
+
+
+#3 Format partitions
+
+/efi
+mkfs.vfat -F32 /dev/nvme0n1p1
+
+/root
+mkfs.ext4 /dev/nvme0n1p2
+
+#4 Mount partitions
+
+/root
+mount /dev/nvme0n1p2 /mnt
+
+/efi
+mkdir -p /mnt/efi
+mount -o noatime /dev/nvme0n1p1 /mnt/efi
+
+
+
+
