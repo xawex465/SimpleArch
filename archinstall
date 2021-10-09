@@ -104,15 +104,12 @@ useradd -m -g users -G wheel -s /bin/bash "username"
 passwd "username"
 
 #16 Setup Sudo for group Whell
-exit chroot just type exit and enter
 enter this EDITOR=nano visudo
 
 Search for "#%wheel ALL=(ALL) ALL" and remove # and add this line "Defaults rootpw" below so it looks like the following
 
 %wheel ALL=(ALL) ALL
 Defaults rootpw
-
-enter chroot again
 
 #17 Setup Network Manager
 pacman -S networkmanager
